@@ -1,7 +1,6 @@
 from lib import upynitel
 
 from machine import UART
-
 class Template:
     title_height = 1
     command_height = 1
@@ -27,9 +26,3 @@ class Template:
     def show(self):
         self.show_title()
         self.show_helper()
-
-class TemplateElement:
-    
-test = Template("proutiprouta", "press c for command list")
-
-test.show()
