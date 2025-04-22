@@ -3,7 +3,7 @@ class TemplateElement:
         self.minitel = minitel
         self.content = content
         self.content_to_display = None
-        self.last_displayed = [], False
+        self.last_displayed = []
         self.height = None
         self.inverse = inverse
 
@@ -19,24 +19,25 @@ class TemplateElement:
         self.content_to_display = content
         self.inverse = inverse
         self.lines = [content[i:i+width] for i in range(0, len(content), width)]
+        self.last_displayed = []
         return len(self.lines)
 
     def prepare_update(self, width):
         content = self.get_content()
         inverse = self.get_inverse()
         lines = [content[i:i+width] for i in range(0, len(content), width)]
-        last_displayed_lines, last_inverse_state = self.last_displayed
         lines_to_update = set()
-        if len(lines) > len(last_displayed_lines):
-            lines_to_update = {i + len(last_displayed_lines) for i in range(len(lines) - len(last_displayed_lines))}
-        if len(lines) < len(last_displayed_lines):
-            lines_to_update = {i + len(lines) for i in range(len(last_displayed_lines) - len(lines))}
+        if len(lines) > len(self.last_displayed):
+            lines_to_update = {i + len(self.last_displayed) for i in range(len(lines) - len(self.last_displayed))}
+        if len(lines) < len(self.last_displayed):
+            lines_to_update = {i + len(lines) for i in range(len(self.last_displayed) - len(lines))}
         for i, line in enumerate(lines):
-            if len(last_displayed_lines)<=i or line != last_displayed_lines[i] or inverse != last_inverse_state:
+            if len(self.last_displayed)<=i or line != self.last_displayed[i]["line"] or inverse != self.last_displayed[i]["inversed"]:
                 lines_to_update.add(i)
         self.content_to_display = content
         self.inverse = inverse
         self.lines = lines
+        self.last_displayed = []
         return lines_to_update, len(self.lines)
 
     def clear_zone(self, x, y, width):
@@ -46,24 +47,22 @@ class TemplateElement:
         #     self.minitel._print(" " * width)
         pass
 
-    def display(self, x, y, width, element_line):
+    def display(self, x, y, width, element_line, should_inverse=None):
         self.clear_zone(x, y, width)
         self.minitel.pos(y, x)
-        if self.get_inverse():
+        if should_inverse is None:
+            should_inverse = self.get_inverse()
+        if should_inverse:
             self.minitel.inverse()
         self.minitel._print('{:<{width}}'.format(self.lines[element_line], width=width))
-        self.last_displayed = self.lines, self.inverse
+        self.last_displayed.append({"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y})
 
-    def update(self, new_position, width=40):
-        current_content = self.content_to_display
-        if new_position is not None and new_position != self.position:
-            self.position = new_position
-        if current_content != self.last_displayed:
-            self.clear_old_content()
-            lines = [current_content[i:i+width] for i in range(0, len(current_content), width)]
-            for i, line in enumerate(lines):
-                self.minitel.vtab(self.position + i)
-                if self.get_inverse():
-                    self.minitel.inverse()
-                self.minitel._print(line.ljust(width))
-            self.last_displayed = current_content
+
+    def update(self, x, y, width, element_line):
+        should_inverse = self.get_inverse()
+        if len(self.last_displayed)<=element_line or self.last_displayed[element_line] != {"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y}:
+            self.display(x, y, width, element_line, should_inverse)
+            if len(self.last_displayed)<=element_line:
+                self.last_displayed.append({"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y})
+            else:
+                self.last_displayed[element_line] = {"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y}
