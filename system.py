@@ -8,7 +8,6 @@ class System:
     def __init__(self):
         self.minitel = upynitel.Pynitel(UART(2, baudrate=1200, parity=0, bits=7, stop=1))
         self.minitel.cls()
-        self.minitel.drawscreen('homeassistant.vtx')
         self.line = 4
         self.application_handler = TabHandler(self.minitel)
 

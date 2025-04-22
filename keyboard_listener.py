@@ -14,7 +14,6 @@ class KeyboardListener:
                 if isinstance(last_char, bytes):
                     last_char = last_char.decode('utf-8')
                 if self.application_handler.is_tab_launch_key(last_char):
-                    self.minitel._print("Ouhlala")
                     self.application_handler.open_tab_from_key(last_char)
                 else:
                     self.application_handler.send_to_buffer(last_char)

@@ -19,7 +19,6 @@ class TemplateElement:
         self.content_to_display = content
         self.inverse = inverse
         self.lines = [content[i:i+width] for i in range(0, len(content), width)]
-        self.last_displayed = []
         return len(self.lines)
 
     def prepare_update(self, width):
@@ -37,7 +36,6 @@ class TemplateElement:
         self.content_to_display = content
         self.inverse = inverse
         self.lines = lines
-        self.last_displayed = []
         return lines_to_update, len(self.lines)
 
     def clear_zone(self, x, y, width):
@@ -55,7 +53,10 @@ class TemplateElement:
         if should_inverse:
             self.minitel.inverse()
         self.minitel._print('{:<{width}}'.format(self.lines[element_line], width=width))
-        self.last_displayed.append({"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y})
+        if len(self.last_displayed)<=element_line:
+            self.last_displayed.append({"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y})
+        else:
+            self.last_displayed[element_line] = {"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y}
 
 
     def update(self, x, y, width, element_line):

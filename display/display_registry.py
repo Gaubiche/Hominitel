@@ -53,10 +53,7 @@ class DisplayRegistry:
                 h+=1
         for i in self.display_map.keys():
             for j, el in self.display_map[i].items():
-                print(lines_to_update)
-                if j in lines_to_update:
-                    template_element = el[0]
-                    inner_line = el[1]
-                    if template_element != None and inner_line != -1:
-                        template_element.display(1+j*(self.display_mode["width"] + self.display_mode["column_spacing"]), i, self.display_mode["width"], inner_line)
-
+                template_element = el[0]
+                inner_line = el[1]
+                if template_element != None and inner_line != -1:
+                    template_element.display(1+j*(self.display_mode["width"] + self.display_mode["column_spacing"]), i, self.display_mode["width"], inner_line)
