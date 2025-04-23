@@ -4,13 +4,14 @@ from tab import Tab
 from tabs.hello_world import HelloWorld
 from tabs.menu import Menu
 from keyboard_listener import KeyboardListener
-
+from tabs.dashboard import Dashboard
 
 class TabHandler:
     def __init__(self, minitel):
         self.tabs = {}
         self.current_tab = None
         self.register_tab(HelloWorld(minitel), 'H')
+        self.register_tab(Dashboard(minitel), 'D')
         self.register_tab(Menu(minitel, self.tabs), 'M', True)
         self.keyboard_listener = KeyboardListener(self, minitel)
 
@@ -29,6 +30,7 @@ class TabHandler:
     def open_tab(self, tab):
         if self.current_tab and tab!=self.current_tab:
             self.current_tab.terminate()
+            print("Tab terminated")
         self.current_tab = tab
         self.current_tab.should_stop = False
 

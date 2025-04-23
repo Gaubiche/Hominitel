@@ -9,9 +9,11 @@ class HelloWorld(Tab):
     def __init__(self, minitel):
         super().__init__(minitel, description="Displays a 'Hello world'")
         self.display_registry = DisplayRegistry()
+        self.display_registry.register(TemplateElement(self.minitel,"Hello world!"))
 
     def run(self):
-        self.display_registry.register(TemplateElement(self.minitel,"Hello world!"))
+        self.minitel.cls()
+        self.display_registry.display()
         while True:
             if self.should_stop:
                 return
