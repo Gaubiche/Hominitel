@@ -14,10 +14,8 @@ class KeyboardListener:
                 if isinstance(last_char, bytes):
                     last_char = last_char.decode('utf-8')
                 if self.application_handler.is_tab_launch_key(last_char):
-                    print("Tab launch key detected:", last_char)
                     self.application_handler.open_tab_from_key(last_char)
                 else:
-                    print("Key detected:", last_char)
                     self.application_handler.send_to_buffer(last_char)
             time.sleep(0.1)
 

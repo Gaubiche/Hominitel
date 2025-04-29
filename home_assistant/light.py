@@ -24,5 +24,11 @@ class Light(Entity):
         else:
             raise ValueError("Invalid state. Use 'on' or 'off'.")
 
+    def toggle(self):
+        if self.is_on:
+            self.set_state("off")
+        else:
+            self.set_state("on")
+
     def get_boolean_state(self):
         return self.is_on

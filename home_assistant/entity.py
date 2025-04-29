@@ -5,7 +5,6 @@ class Entity:
         self.entity_id = entity_id
         self.api = HomeAssistantAPI()
         self.is_settable = False
-        print(self.get_state())
         self.name = self.get_state()["attributes"]["friendly_name"]
         self.is_on = False
 
