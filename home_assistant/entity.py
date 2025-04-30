@@ -5,14 +5,16 @@ class Entity:
         self.entity_id = entity_id
         self.api = HomeAssistantAPI()
         self.is_settable = False
-        self.name = self.get_state()["attributes"]["friendly_name"]
+        self.update_state()
+        self.name = self.state["attributes"]["friendly_name"]
         self.is_on = False
 
-    def get_state(self):
-        return self.api.get_state(self.entity_id)
+    def update_state(self):
+        self.state = self.api.get_state(self.entity_id)
+        return self.state
 
     def get_state_string(self):
-        return self.get_state()["state"]
+        return self.state["state"]
 
     def get_boolean_state(self):
         return False

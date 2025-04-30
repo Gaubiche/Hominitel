@@ -7,6 +7,9 @@ class LightController(Selectable):
         self.light = Light(entity_id)
         super().__init__(minitel, self.content)
 
+    def get_entity(self):
+        return self.light
+
     def content(self):
         return f"{self.light.name} - {self.light.get_state_string()}"
 

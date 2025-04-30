@@ -16,8 +16,7 @@ class TemplateElement:
     def prepare_content(self, width):
         content = self.get_content()
         inverse = self.get_inverse()
-        self.content_to_display = content
-        self.inverse = inverse
+        self.inverse_to_display = inverse
         self.lines = [content[i:i+width] for i in range(0, len(content), width)]
         return len(self.lines)
 
@@ -33,8 +32,7 @@ class TemplateElement:
         for i, line in enumerate(lines):
             if len(self.last_displayed)<=i or line != self.last_displayed[i]["line"] or inverse != self.last_displayed[i]["inversed"]:
                 lines_to_update.add(i)
-        self.content_to_display = content
-        self.inverse = inverse
+        self.inverse_to_display = inverse
         self.lines = lines
         return lines_to_update, len(self.lines)
 
@@ -45,25 +43,22 @@ class TemplateElement:
         #     self.minitel._print(" " * width)
         pass
 
-    def display(self, x, y, width, element_line, should_inverse=None):
+    def display(self, x, y, width, element_line):
         self.clear_zone(x, y, width)
         self.minitel.pos(y, x)
-        if should_inverse is None:
-            should_inverse = self.get_inverse()
-        if should_inverse:
+        if self.inverse_to_display:
             self.minitel.inverse()
         self.minitel._print('{:<{width}}'.format(self.lines[element_line], width=width))
         if len(self.last_displayed)<=element_line:
-            self.last_displayed.append({"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y})
+            self.last_displayed.append({"line": self.lines[element_line], "inversed": self.inverse_to_display, "x": x, "y": y})
         else:
-            self.last_displayed[element_line] = {"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y}
+            self.last_displayed[element_line] = {"line": self.lines[element_line], "inversed": self.inverse_to_display, "x": x, "y": y}
 
 
     def update(self, x, y, width, element_line):
-        should_inverse = self.get_inverse()
-        if len(self.last_displayed)<=element_line or self.last_displayed[element_line] != {"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y}:
-            self.display(x, y, width, element_line, should_inverse)
+        if len(self.last_displayed)<=element_line or self.last_displayed[element_line] != {"line": self.lines[element_line], "inversed": self.inverse_to_display, "x": x, "y": y}:
+            self.display(x, y, width, element_line)
             if len(self.last_displayed)<=element_line:
-                self.last_displayed.append({"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y})
+                self.last_displayed.append({"line": self.lines[element_line], "inversed": self.inverse_to_display, "x": x, "y": y})
             else:
-                self.last_displayed[element_line] = {"line": self.lines[element_line], "inversed": should_inverse, "x": x, "y": y}
+                self.last_displayed[element_line] = {"line": self.lines[element_line], "inversed": self.inverse_to_display, "x": x, "y": y}

@@ -86,6 +86,9 @@ class Pynitel:
         "Positionne le curseur sur un début de ligne"
         self.pos(ligne, 1)
 
+    def echo_off(self):
+        self.conn.write(bytes([0x1B, 0x3B, 0x60, 0x5A, 0x51]))
+
     def pos(self, ligne, colonne=1):
         "Positionne le curseur sur une ligne / colonne"
         if ligne == 1 and colonne == 1:
