@@ -1,9 +1,3 @@
-import random
-from lib import upynitel
-from machine import UART
-from display.template_element import TemplateElement
-
-
 class DisplayMode:
     WIDE = {"width": 40, "column_nb": 1, "column_spacing": 0}
     TWO_COLUMNS = {"width": 18, "column_nb": 2, "column_spacing": 2}
