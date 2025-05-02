@@ -1,6 +1,6 @@
 import network
 from machine import UART
-from lib import upynitel
+from api import upynitel
 import urequests
 import time
 import json
