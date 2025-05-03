@@ -1,4 +1,4 @@
-from api import upynitel
+from lib import upynitel
 
 from machine import UART
 class Template:

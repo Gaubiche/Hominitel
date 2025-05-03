@@ -9,13 +9,10 @@ except ImportError:
 
 class WiFiConnection:
     def __init__(self):
-        self.ssid = config.WIFI_SSID
-        self.password = config.WIFI_PASSWORD
-
         if NETWORK_AVAILABLE:
+            self.ssid = config.WIFI_SSID
+            self.password = config.WIFI_PASSWORD
             self.wlan = network.WLAN(network.STA_IF)
-        else:
-            self.wlan = None  # Pas utilisé en mode dev
 
     def connect(self):
         if not NETWORK_AVAILABLE:

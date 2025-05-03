@@ -2,10 +2,11 @@ import asyncio
 import websockets
 import json
 import threading
-import select
-import sys
 
-class MinitelSimuClient:
+from api.minitel_client import MinitelClient
+
+
+class MinitelSimuClient(MinitelClient):
     uri = "ws://localhost:8000/ws"
     def __init__(self):
         self.loop = asyncio.new_event_loop()
@@ -23,12 +24,9 @@ class MinitelSimuClient:
 
     def listen_input(self):
         while True:
-            # Vérifie s'il y a quelque chose à lire sur stdin (non bloquant)
-            if select.select([sys.stdin], [], [], 0.1)[0]:
-                user_input = sys.stdin.readline()
-                with self.buffer_lock:
-                    print(f"User input: {repr(user_input)}")
-                    self.input_buffer.append(user_input)
+            user_input = input()
+            with self.buffer_lock:
+                self.input_buffer.append(user_input)
 
     def _start_loop(self):
         asyncio.set_event_loop(self.loop)
@@ -64,8 +62,7 @@ class MinitelSimuClient:
         self.send_command({"type": "print", "text": text})
 
     def pos(self, row: int, col: int):
-        print(f"Setting position to row: {row}, col: {col}")
-        self.send_command({"type": "pos", "row": row, "col": col})
+        self.send_command({"type": "pos", "row": row, "col": col-1})
 
     def cls(self):
         self.send_command({"type": "cls"})
@@ -79,6 +76,9 @@ class MinitelSimuClient:
     def _if(self):
         with self.buffer_lock:
             if self.input_buffer:
-                return self.input_buffer.pop(0)
+                val = self.input_buffer.pop(0)
+                if val =="":
+                    return "\r"
+                return val.replace("\n", "")
         return None
 

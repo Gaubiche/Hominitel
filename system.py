@@ -11,10 +11,5 @@ class System:
         self.line = 4
         self.application_handler = TabHandler(self.minitel)
 
-    def print(self, message: str):
-        self.minitel.vtab(self.line)
-        self.minitel._print("> " + message)
-        self.line += 2
-
     def run(self):
         self.application_handler.run()

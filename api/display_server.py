@@ -1,6 +1,7 @@
 from fastapi import FastAPI, WebSocket
 import json
 import curses
+import time
 
 app = FastAPI()
 
@@ -10,15 +11,8 @@ class MinitelSimu:
         self.rows = rows
         self.cols = cols
         self.win = curses.newwin(rows, cols, 0, 0)
-        # self.win.nodelay(True)
-        # self.row = 1
-        # self.col = 1
-        # curses.curs_set(1)
         curses.noecho()
         curses.cbreak()
-        # self.stdscr.keypad(True)
-        # self.win.keypad(True)
-        # curses.raw()
         self.inverse_mode = False
 
     def inverse(self):
@@ -47,8 +41,9 @@ class MinitelSimu:
             if self.row >= self.rows:
                 break
             self.win.addch(self.row, self.col, ch)
+            self.win.refresh()
+            time.sleep(0.02)
             self.col += 1
-        self.win.move(self.row, self.col)
         self.win.refresh()
 
     def cls(self):
