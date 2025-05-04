@@ -1,4 +1,4 @@
-# Minitel Home Assistant Interface
+# Hominitel
 
 This is a **work-in-progress MicroPython project** designed to run on **ESP32 boards**, specifically the ones developed by **Iodeo**, which are designed to be directly plugged into **Minitel terminals**.
 
@@ -6,7 +6,7 @@ The goal of this project is to **turn a Minitel into a Home Assistant control in
 
 ---
 
-## Goal
+## Features/Goal
 
 - Connects to Home Assistant via its REST API.
 - Displays a simple dashboard of Home Assistant entities (e.g., lights) and interacts with them.
