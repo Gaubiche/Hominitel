@@ -29,3 +29,19 @@ class HomeAssistantAPI:
         }
         response = post(url, headers=headers, json=data)
         return response.json()
+
+    def prompt(self, text, conversation_id=None):
+        url = f"{self.api_url}/services/conversation/process"
+        payload = {
+            "text": text.lower(),
+            "agent_id": "conversation.chatgpt"
+        }
+        if conversation_id is not None:
+            payload["conversation_id"]= conversation_id
+
+        headers = {
+            'Content-Type': 'text/plain',
+            'Authorization': self.api_token
+        }
+        response = post(url, headers=headers, json=payload)
+        return response.json()

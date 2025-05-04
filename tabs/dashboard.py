@@ -1,7 +1,9 @@
 import time
 
+import config
 from display.display_registry import DisplayRegistry
 from home_assistant.entities_updater import EntitiesUpdater
+from home_assistant.entity_controller import EntityController
 from home_assistant.light_controller import LightController
 from tab import Tab
 
@@ -9,11 +11,8 @@ class Dashboard(Tab):
     def __init__(self, minitel):
         super().__init__(minitel, description="Home Assistant Dashboard")
         self.controllers = []
-        self.controllers.append(LightController(minitel, "light.salon"))
-        self.controllers.append(LightController(minitel, "light.ampoule_boudha_prise_1"))
-        self.controllers.append(LightController(minitel, "light.lampe_bibliotheque_prise_1"))
-        self.controllers.append(LightController(minitel, "light.osram_lightify_indoor_flex_rgbw_lumiere"))
-        self.controllers.append(LightController(minitel, "light.divoom_pixoo_64_light"))
+        for entity in config.ENTITIES:
+            self.controllers.append(self.controller_from_entity(entity))
         self.selected_index = 0
         self.display_registry = DisplayRegistry(top=10, bottom=20)
         self.entities_updater = EntitiesUpdater()
@@ -47,3 +46,8 @@ class Dashboard(Tab):
                 self.entities_updater.running = False
                 return
             time.sleep(0.1)
+
+    def controller_from_entity(self, entity_id: str):
+        if entity_id.startswith("light"):
+            return LightController(self.minitel, entity_id)
+        return EntityController(self.minitel,entity_id)
