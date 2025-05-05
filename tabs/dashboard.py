@@ -4,6 +4,7 @@ import config
 from display.display_registry import DisplayRegistry
 from home_assistant.entities_updater import EntitiesUpdater
 from home_assistant.entity_controller import EntityController
+from home_assistant.input_select_controller import InputSelectController
 from home_assistant.light_controller import LightController
 from tab import Tab
 
@@ -18,7 +19,7 @@ class Dashboard(Tab):
         self.entities_updater = EntitiesUpdater()
         for controller in self.controllers:
             self.display_registry.register(controller.get_template_element())
-            self.entities_updater.register(controller.get_entity())
+            self.entities_updater.register(controller)
         self.update_selected()
 
     def update_selected(self):
@@ -50,4 +51,6 @@ class Dashboard(Tab):
     def controller_from_entity(self, entity_id: str):
         if entity_id.startswith("light"):
             return LightController(self.minitel, entity_id)
+        if entity_id.startswith("input_select"):
+            return InputSelectController(self.minitel, entity_id)
         return EntityController(self.minitel,entity_id)

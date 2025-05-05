@@ -4,10 +4,8 @@ class Entity:
     def __init__(self, entity_id):
         self.entity_id = entity_id
         self.api = HomeAssistantAPI()
-        self.is_settable = False
         self.update_state()
         self.name = self.state["attributes"]["friendly_name"]
-        self.is_on = False
 
     def update_state(self):
         self.state = self.api.get_state(self.entity_id)

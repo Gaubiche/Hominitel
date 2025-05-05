@@ -18,15 +18,13 @@ class HomeAssistantAPI:
         response = get(url, headers=headers)
         return response.json()
 
-    def set_state(self, entity_id, domain, service):
+    def set_state(self, entity_id, domain, service, data={}):
         url = f"{self.api_url}/services/{domain}/{service}"
         headers = {
             "Authorization": self.api_token,
             "content-type": "application/json",
         }
-        data = {
-            "entity_id": entity_id
-        }
+        data["entity_id"] = entity_id
         response = post(url, headers=headers, json=data)
         return response.json()
 

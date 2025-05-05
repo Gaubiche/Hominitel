@@ -1,10 +1,10 @@
 from controller.select import Selectable
-from home_assistant.light import Light
+from home_assistant.input_select import InputSelect
 
 
-class LightController(Selectable, Light):
+class InputSelectController(Selectable, InputSelect):
     def __init__(self, minitel, entity_id):
-        Light.__init__(self, entity_id)
+        InputSelect.__init__(self, entity_id)
         super().__init__(minitel, self.content)
 
     def content(self):
