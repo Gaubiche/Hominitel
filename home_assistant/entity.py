@@ -4,7 +4,7 @@ class Entity:
     def __init__(self, entity_id):
         self.entity_id = entity_id
         self.api = HomeAssistantAPI()
-        self.update_state()
+        Entity.update_state(self)
         self.name = self.state["attributes"]["friendly_name"]
 
     def update_state(self):

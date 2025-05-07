@@ -8,4 +8,4 @@ class EntityController(Selectable, Entity):
         super().__init__(minitel, self.content)
 
     def content(self):
-        return f"{self.entity.name} - {self.entity.get_state_string()}"
+        return f"{self.name} - {self.get_state_string()}"
