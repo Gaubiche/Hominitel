@@ -1,11 +1,21 @@
-# from machine import UART
-from api.simu_client import MinitelSimuClient
+try:
+    from machine import UART
+    from api import upynitel
+    ON_MINITEL = True
+except:
+    from api.simu_client import MinitelSimuClient
+    import curses
+    ON_MINITEL = False
+
+
 from tab_handler import TabHandler
-import curses
 
 class System:
     def __init__(self):
-        self.minitel = MinitelSimuClient()
+        if ON_MINITEL:
+            self.minitel = upynitel.Pynitel(UART(2, baudrate=1200, parity=0, bits=7, stop=1))
+        else:    
+            self.minitel = MinitelSimuClient()
         self.minitel.echo_off()
         self.minitel.cls()
         self.line = 4
