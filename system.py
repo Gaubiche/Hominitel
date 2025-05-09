@@ -1,6 +1,6 @@
 try:
     from machine import UART
-    from api import upynitel
+    from api.upynitel_client import PynitelClient
     ON_MINITEL = True
 except:
     from api.simu_client import MinitelSimuClient
@@ -13,7 +13,7 @@ from tab_handler import TabHandler
 class System:
     def __init__(self):
         if ON_MINITEL:
-            self.minitel = upynitel.Pynitel(UART(2, baudrate=1200, parity=0, bits=7, stop=1))
+            self.minitel = PynitelClient(UART(2, baudrate=1200, parity=0, bits=7, stop=1))
         else:    
             self.minitel = MinitelSimuClient()
         self.minitel.echo_off()
