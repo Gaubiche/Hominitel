@@ -1,11 +1,12 @@
 from requests import get, post
-import config
+
+from hominitel.config import config
 from hominitel.minitel.connection import WiFiConnection
 
 class HomeAssistantAPI:
     def __init__(self):
-        self.api_url = config.API_URL
-        self.api_token = config.API_TOKEN
+        self.api_url = config.HA_API_URL
+        self.api_token = config.HA_API_TOKEN
         self.wifi_connection = WiFiConnection()
         self.wifi_connection.connect()
 
@@ -43,3 +44,5 @@ class HomeAssistantAPI:
         }
         response = post(url, headers=headers, json=payload)
         return response.json()
+
+home_assistant_api = HomeAssistantAPI()

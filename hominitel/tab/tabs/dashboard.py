@@ -1,6 +1,6 @@
 import time
 
-import config
+from hominitel.config import config
 from hominitel.renderer.render_registry import RenderRegistry
 from hominitel.home_assistant.entities_updater import EntitiesUpdater
 from hominitel.home_assistant.entity_controller import EntityController
@@ -12,7 +12,7 @@ class Dashboard(Tab):
     def __init__(self, minitel):
         super().__init__(minitel, description="Home Assistant Dashboard")
         self.controllers = []
-        for entity in config.ENTITIES:
+        for entity in config.DASHBOARD_TAB["entities"]:
             self.controllers.append(self.controller_from_entity(entity))
         self.selected_index = 0
         self.display_registry = RenderRegistry(top=10, bottom=20)

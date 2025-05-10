@@ -18,27 +18,30 @@ The goal of this project is to **turn a Minitel into a Home Assistant control in
 - [ ] Add a startup screen
 - [ ] Add a way to make the configuration through the Minitel (wifi, api url, api token)
 - [ ] Add a way to customize the dashboard on the Minitel (e.g., add/remove entities, change layout, reorder, ...)
+- [ ] Create a notification system to display messages on the Minitel (with the minitel beep)
 ---
 
 ## Getting Started
 
 ### 1. Configuration
 
-Create a `config.py` file at the root of the project with the following content:
+Create a `config.json` file at the root of the project with the following content:
 
-```python
-API_URL = "<home-assistant-url>:8123/api"
-API_TOKEN = "Bearer <api_token>"
-WIFI_SSID = ""  # Not needed for dev setup
-WIFI_PASSWORD = ""  # Not needed for dev setup
-ENTITIES = []  # List of Home Assistant entities to expose in the dashboard
+```json
+{
+    "HA_API_URL": "<home-assistant-url>:8123/api",
+    "HA_API_TOKEN": "Bearer <api_token>",
+    "WIFI_SSID": "",
+    "WIFI_PASSWORD": "",
+    "DASHBOARD_TAB": {"entities":  ["<entity_id_1>", "<entity_id_2>"]}
+}
 ```
 
 ### 2. Installation
 
 1. Install [MicroPython](https://micropython.org/download/esp32/) on your ESP32 board.
 2. Copy all Python files from the project root to the ESP32 using a tool like [mpremote](https://docs.micropython.org/en/latest/reference/mpremote.html) or [ampy](https://github.com/scientifichackers/ampy).
-3. Ensure the `config.py` file is also uploaded.
+3. Ensure the `config.json` file is also uploaded.
 
 ---
 

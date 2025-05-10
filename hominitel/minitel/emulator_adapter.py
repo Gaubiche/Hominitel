@@ -4,6 +4,7 @@ import json
 import threading
 
 from hominitel.minitel.adapter import Adapter
+from hominitel.minitel.special_characters import SpecialCharacters
 
 
 class SimuAdapter(Adapter):
@@ -77,8 +78,8 @@ class SimuAdapter(Adapter):
         with self.buffer_lock:
             if self.input_buffer:
                 val = self.input_buffer.pop(0)
-                if val =="":
-                    return "\r"
+                if val == "":
+                    return SpecialCharacters.RETURN_TO_LINE
                 return val.replace("\n", "")
         return None
 
