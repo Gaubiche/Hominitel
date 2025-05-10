@@ -6,7 +6,7 @@ from hominitel.home_assistant.entities_updater import EntitiesUpdater
 from hominitel.home_assistant.entity_controller import EntityController
 from hominitel.home_assistant.input_select_controller import InputSelectController
 from hominitel.home_assistant.light_controller import LightController
-from hominitel.tab import Tab
+from hominitel.tab.tab import Tab
 
 class Dashboard(Tab):
     def __init__(self, minitel):

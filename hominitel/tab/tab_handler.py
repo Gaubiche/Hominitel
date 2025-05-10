@@ -1,11 +1,11 @@
 import _thread
 
-from hominitel.tab import Tab
-from hominitel.tabs.hello_world import HelloWorld
-from hominitel.tabs.menu import Menu
+from hominitel.tab.tab import Tab
+from hominitel.tab.tabs.hello_world import HelloWorld
+from hominitel.tab.tabs.menu import Menu
 from hominitel.minitel.keyboard_listener import KeyboardListener
-from hominitel.tabs.dashboard import Dashboard
-from hominitel.tabs.prompt import Prompt
+from hominitel.tab.tabs.dashboard import Dashboard
+from hominitel.tab.tabs.prompt import Prompt
 
 
 class TabHandler:

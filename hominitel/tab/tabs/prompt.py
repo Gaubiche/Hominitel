@@ -1,6 +1,6 @@
 import time
 
-from hominitel.tab import Tab
+from hominitel.tab.tab import Tab
 
 
 class Prompt(Tab):

@@ -8,7 +8,7 @@ except:
     ON_MINITEL = False
 
 
-from hominitel.tab_handler import TabHandler
+from hominitel.tab.tab_handler import TabHandler
 
 class System:
     """

@@ -1,6 +1,6 @@
 from hominitel.renderer.render_registry import RenderRegistry
 from hominitel.renderer.template_element import TemplateElement
-from hominitel.tab import Tab
+from hominitel.tab.tab import Tab
 import time
 
 class Menu(Tab):
