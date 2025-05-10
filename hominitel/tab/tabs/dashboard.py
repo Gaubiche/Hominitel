@@ -1,5 +1,6 @@
 import time
 
+from hominitel.minitel.minitel import minitel
 from hominitel.config import config
 from hominitel.renderer.render_registry import RenderRegistry
 from hominitel.home_assistant.entities_updater import EntitiesUpdater
@@ -9,8 +10,8 @@ from hominitel.home_assistant.light_controller import LightController
 from hominitel.tab.tab import Tab
 
 class Dashboard(Tab):
-    def __init__(self, minitel):
-        super().__init__(minitel, description="Home Assistant Dashboard")
+    def __init__(self):
+        super().__init__(description="Home Assistant Dashboard")
         self.controllers = []
         for entity in config.DASHBOARD_TAB["entities"]:
             self.controllers.append(self.controller_from_entity(entity))
@@ -30,7 +31,7 @@ class Dashboard(Tab):
                 controller.deselect()
 
     def run(self):
-        self.minitel.cls()
+        minitel.cls()
         self.entities_updater.start()
         self.display_registry.display()
         while True:
@@ -50,7 +51,7 @@ class Dashboard(Tab):
 
     def controller_from_entity(self, entity_id: str):
         if entity_id.startswith("light"):
-            return LightController(self.minitel, entity_id)
+            return LightController(minitel, entity_id)
         if entity_id.startswith("input_select"):
-            return InputSelectController(self.minitel, entity_id)
-        return EntityController(self.minitel,entity_id)
+            return InputSelectController(minitel, entity_id)
+        return EntityController(minitel, entity_id)

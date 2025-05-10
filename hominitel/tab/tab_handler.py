@@ -14,14 +14,14 @@ class TabHandler:
     It is responsible for switching between tabs and managing the keyboard listener.
     It also handles the registration of tabs, the default tab and the key bindings for each tab.
     """
-    def __init__(self, minitel):
+    def __init__(self):
         self.tabs = {}
         self.current_tab = None
-        self.register_tab(HelloWorld(minitel), 'H')
-        self.register_tab(Dashboard(minitel), 'D', True)
-        self.register_tab(Prompt(minitel), 'P')
-        self.register_tab(Menu(minitel, self.tabs), 'M')
-        self.keyboard_listener = KeyboardListener(self, minitel)
+        self.register_tab(HelloWorld(), 'H')
+        self.register_tab(Dashboard(), 'D', True)
+        self.register_tab(Prompt(), 'P')
+        self.register_tab(Menu(self.tabs), 'M')
+        self.keyboard_listener = KeyboardListener(self)
 
     def register_tab(self, tab: Tab, key, default=False):
         self.tabs[key] = tab

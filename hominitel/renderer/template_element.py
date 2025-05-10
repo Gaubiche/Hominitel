@@ -1,6 +1,7 @@
+from hominitel.minitel.minitel import minitel
+
 class TemplateElement:
-    def __init__(self, minitel, content, inverse=False):
-        self.minitel = minitel
+    def __init__(self, content, inverse=False):
         self.content = content
         self.content_to_display = None
         self.last_displayed = []
@@ -45,10 +46,10 @@ class TemplateElement:
 
     def display(self, x, y, width, element_line):
         self.clear_zone(x, y, width)
-        self.minitel.pos(y, x)
+        minitel.pos(y, x)
         if self.inverse_to_display:
-            self.minitel.inverse()
-        self.minitel._print('{:<{width}}'.format(self.lines[element_line], width=width))
+            minitel.inverse()
+        minitel._print('{:<{width}}'.format(self.lines[element_line], width=width))
         if len(self.last_displayed)<=element_line:
             self.last_displayed.append({"line": self.lines[element_line], "inversed": self.inverse_to_display, "x": x, "y": y})
         else:

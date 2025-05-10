@@ -42,7 +42,7 @@ class MinitelSimu:
                 break
             self.win.addch(self.row, self.col, ch)
             self.win.refresh()
-            time.sleep(0.02)
+            time.sleep(0.01)
             self.col += 1
         self.win.refresh()
 

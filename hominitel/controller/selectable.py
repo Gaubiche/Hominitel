@@ -3,7 +3,7 @@ from hominitel.renderer.template_element import TemplateElement
 class Selectable():
     def __init__(self, minitel, content):
         self.is_selected = False
-        self.template_element = TemplateElement(minitel, content, lambda: self.inverse())
+        self.template_element = TemplateElement(content, lambda: self.inverse())
         self.content = content
 
     def select(self):

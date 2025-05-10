@@ -5,8 +5,7 @@ class Tab:
     The run method is called in a loop until the tab is terminated.
     The tab is responsible for returning when should_stop is set to True.
     """
-    def __init__(self, minitel, description=""):
-        self.minitel = minitel
+    def __init__(self, description=""):
         self.description = description
         self.buffer = ""
         self.should_stop = False
