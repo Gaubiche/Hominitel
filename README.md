@@ -6,14 +6,18 @@ The goal of this project is to **turn a Minitel into a Home Assistant control in
 
 ---
 
-## Features/Goal
+## Current Features
 
 - Connects to Home Assistant via its REST API.
 - Displays a simple dashboard of Home Assistant entities (e.g., lights) and interacts with them.
-- Run prompts using Home Assistant assist API.
-- Designed to run on ESP32 boards with MicroPython.
 - Development mode includes a built-in Minitel emulator via WebSockets.
 
+## TODO
+- [ ] Add prompt mode
+- [ ] Add keymaps on screen
+- [ ] Add a startup screen
+- [ ] Add a way to make the configuration through the Minitel (wifi, api url, api token)
+- [ ] Add a way to customize the dashboard on the Minitel (e.g., add/remove entities, change layout, reorder, ...)
 ---
 
 ## Getting Started
@@ -44,12 +48,21 @@ The emulator uses curses which does not natively run on Windows.
 
 To simulate the Minitel environment on your local machine:
 
-1. Make sure you have Python 3.9+ and [Uvicorn](https://www.uvicorn.org/) installed.
-2. Start the emulator server:
+1. Install the required dependencies:
 
 ```bash
-cd api
-uvicorn display_server:app --reload
+pip install -r requirements.txt
 ```
-3. Run main.py
 
+2. Start the emulator server:
+```bash
+uvicorn hominitel.minitel.emulator_server:app --reload
+```
+
+3. Run the app
+```bash
+python -m hominitel
+```
+
+Now you can see the screen in the emulator server terminal and interact with it in the app terminal.
+(Note: The emulator requires the enter key to be pressed to send an input, which is not the case on the Minitel)
