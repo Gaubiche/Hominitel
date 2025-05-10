@@ -1,7 +1,7 @@
-from api.minitel_client import MinitelClient
-from lib.upynitel import Pynitel
+from hominitel.minitel.adapter import Adapter
+from hominitel.minitel.lib.upynitel import Pynitel
 
-class PynitelClient(Pynitel, MinitelClient):
+class PynitelAdapter(Pynitel, Adapter):
     def _if(self):
         last_char = self.minitel._if()
         if last_char is None:

@@ -1,6 +1,6 @@
 import time
 
-from system import System
+from hominitel.system import System
 
 if __name__ == "__main__":
     system = System()

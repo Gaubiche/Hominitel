@@ -1,6 +1,6 @@
 from requests import get, post
 import config
-from api.connection import WiFiConnection
+from hominitel.minitel.connection import WiFiConnection
 
 class HomeAssistantAPI:
     def __init__(self):

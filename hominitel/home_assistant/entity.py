@@ -1,4 +1,4 @@
-from home_assistant.home_assistant import HomeAssistantAPI
+from hominitel.home_assistant.home_assistant import HomeAssistantAPI
 
 class Entity:
     def __init__(self, entity_id):

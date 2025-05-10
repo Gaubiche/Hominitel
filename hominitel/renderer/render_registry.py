@@ -2,7 +2,7 @@ class DisplayMode:
     WIDE = {"width": 40, "column_nb": 1, "column_spacing": 0}
     TWO_COLUMNS = {"width": 18, "column_nb": 2, "column_spacing": 2}
 
-class DisplayRegistry:
+class RenderRegistry:
     def __init__(self, display_mode=DisplayMode.WIDE, top=1, bottom=39):
         self.elements = []
         self.top = top

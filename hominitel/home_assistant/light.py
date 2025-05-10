@@ -1,4 +1,4 @@
-from home_assistant.entity import Entity
+from hominitel.home_assistant.entity import Entity
 
 class Light(Entity):
     def __init__(self, entity_id):

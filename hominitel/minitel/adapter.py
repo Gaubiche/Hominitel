@@ -1,4 +1,4 @@
-class MinitelClient:
+class Adapter:
     def _print(self, text: str):
         raise NotImplementedError("_print method must be implemented")
 

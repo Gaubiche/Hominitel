@@ -1,5 +1,5 @@
-from controller.select import Selectable
-from home_assistant.input_select import InputSelect
+from hominitel.controller.selectable import Selectable
+from hominitel.home_assistant.input_select import InputSelect
 
 
 class InputSelectController(Selectable, InputSelect):

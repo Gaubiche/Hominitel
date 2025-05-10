@@ -1,4 +1,4 @@
-from display.template_element import TemplateElement
+from hominitel.renderer.template_element import TemplateElement
 
 class Selectable():
     def __init__(self, minitel, content):

@@ -1,5 +1,5 @@
-from controller.select import Selectable
-from home_assistant.light import Light
+from hominitel.controller.selectable import Selectable
+from hominitel.home_assistant.light import Light
 
 
 class LightController(Selectable, Light):

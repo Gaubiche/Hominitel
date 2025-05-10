@@ -3,10 +3,10 @@ import websockets
 import json
 import threading
 
-from api.minitel_client import MinitelClient
+from hominitel.minitel.adapter import Adapter
 
 
-class MinitelSimuClient(MinitelClient):
+class SimuAdapter(Adapter):
     uri = "ws://localhost:8000/ws"
     def __init__(self):
         self.loop = asyncio.new_event_loop()

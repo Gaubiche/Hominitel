@@ -1,12 +1,12 @@
 import time
 
 import config
-from display.display_registry import DisplayRegistry
-from home_assistant.entities_updater import EntitiesUpdater
-from home_assistant.entity_controller import EntityController
-from home_assistant.input_select_controller import InputSelectController
-from home_assistant.light_controller import LightController
-from tab import Tab
+from hominitel.renderer.render_registry import RenderRegistry
+from hominitel.home_assistant.entities_updater import EntitiesUpdater
+from hominitel.home_assistant.entity_controller import EntityController
+from hominitel.home_assistant.input_select_controller import InputSelectController
+from hominitel.home_assistant.light_controller import LightController
+from hominitel.tab import Tab
 
 class Dashboard(Tab):
     def __init__(self, minitel):
@@ -15,7 +15,7 @@ class Dashboard(Tab):
         for entity in config.ENTITIES:
             self.controllers.append(self.controller_from_entity(entity))
         self.selected_index = 0
-        self.display_registry = DisplayRegistry(top=10, bottom=20)
+        self.display_registry = RenderRegistry(top=10, bottom=20)
         self.entities_updater = EntitiesUpdater()
         for controller in self.controllers:
             self.display_registry.register(controller.get_template_element())

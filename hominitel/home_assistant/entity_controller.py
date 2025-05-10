@@ -1,5 +1,5 @@
-from controller.select import Selectable
-from home_assistant.entity import Entity
+from hominitel.controller.selectable import Selectable
+from hominitel.home_assistant.entity import Entity
 
 
 class EntityController(Selectable, Entity):
