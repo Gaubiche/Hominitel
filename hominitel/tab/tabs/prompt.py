@@ -10,7 +10,7 @@ class Prompt(Tab):
 
     def run(self):
         minitel.cls()
-        minitel._print("Bonjour, je suis ChatGPT")
+        minitel.print("Bonjour, je suis ChatGPT")
         while True:
             time.sleep(0.1)
 
@@ -26,23 +26,23 @@ class HomeAssistantAPI:
     def print(self, message: str, is_assistant: bool = False):
         if is_assistant:
             minitel.pos(self.line, 10)
-        minitel._print("> " + message)
+        minitel.print("> " + message)
         print(len("> " + message))
         print("> " + message)
         self.line += 2 + (len(message) + (10 if is_assistant else 0))//40
         minitel.vtab(self.line)
     
     def wait_for_input(self):
-        last_char = self.minitel._if()
+        last_char = self.minitel.get_input()
         buffer = ""
         while '\r' not in str(last_char):
             if last_char == '\x13E':
                 buffer = ""
                 minitel.vtab(self.line)
                 minitel._del(self.line, 1)
-                minitel._print("> ")
+                minitel.print("> ")
             minitel.cursor(True)
-            last_char = self.minitel._if()
+            last_char = self.minitel.get_input()
             if last_char is not None:
                 if isinstance(last_char, bytes):
                     last_char = last_char.decode('utf-8')

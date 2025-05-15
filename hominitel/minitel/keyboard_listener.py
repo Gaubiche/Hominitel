@@ -1,21 +1,17 @@
 import _thread
 import time
 
-from hominitel.minitel.minitel import minitel
-
 class KeyboardListener:
-    def __init__(self, application_handler):
+    def __init__(self, display_controller):
         self.running = True
-        self.application_handler = application_handler
+        self.display_controller = display_controller
 
     def listen(self):
+        from hominitel.minitel.minitel import minitel
         while self.running:
-            last_char = minitel._if()
+            last_char = minitel.get_input()
             if last_char is not None:
-                if self.application_handler.is_tab_launch_key(last_char):
-                    self.application_handler.open_tab_from_key(last_char)
-                else:
-                    self.application_handler.send_to_buffer(last_char)
+                self.display_controller.on_key(last_char)
             time.sleep(0.1)
 
     def start(self):

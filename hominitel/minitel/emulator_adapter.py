@@ -7,7 +7,7 @@ from hominitel.minitel.adapter import Adapter
 from hominitel.minitel.special_characters import SpecialCharacters
 
 
-class SimuAdapter(Adapter):
+class EmulatorAdapter(Adapter):
     uri = "ws://localhost:8000/ws"
     def __init__(self):
         self.loop = asyncio.new_event_loop()
@@ -59,7 +59,7 @@ class SimuAdapter(Adapter):
     def send_command(self, mapping: dict):
         asyncio.run_coroutine_threadsafe(self._send(mapping), self.loop)
 
-    def _print(self, text: str):
+    def print(self, text: str):
         self.send_command({"type": "print", "text": text})
 
     def pos(self, row: int, col: int):
@@ -74,12 +74,12 @@ class SimuAdapter(Adapter):
     def echo_off(self):
         pass
 
-    def _if(self):
+    def get_input(self):
         with self.buffer_lock:
             if self.input_buffer:
                 val = self.input_buffer.pop(0)
                 if val == "":
-                    return SpecialCharacters.RETURN_TO_LINE
+                    return SpecialCharacters.ENTER
                 return val.replace("\n", "")
         return None
 

@@ -2,7 +2,7 @@ import time
 
 from hominitel.system import System
 
-if __name__ == "__main__":
+def main():
     system = System()
     system.run()
     try:
@@ -11,3 +11,6 @@ if __name__ == "__main__":
     except Exception as e:
         system.stop()
         system.print("Shutdown")
+
+if __name__ == "__main__":
+    main()

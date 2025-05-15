@@ -1,4 +1,4 @@
-from hominitel.tab.tab_handler import TabHandler
+from hominitel.tab.display_controller import DisplayController
 from hominitel.minitel.minitel import minitel
 
 class System:
@@ -10,7 +10,7 @@ class System:
         minitel.echo_off()
         minitel.cls()
         self.line = 4
-        self.application_handler = TabHandler()
+        self.application_handler = DisplayController()
 
     def run(self):
         self.application_handler.run()

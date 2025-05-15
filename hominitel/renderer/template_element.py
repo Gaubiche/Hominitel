@@ -41,7 +41,7 @@ class TemplateElement:
         # self.minitel.pos()
         # for i in range(self.height):
         #     self.minitel.vtab(self.position + i)
-        #     self.minitel._print(" " * width)
+        #     self.minitel.print(" " * width)
         pass
 
     def display(self, x, y, width, element_line):
@@ -49,7 +49,7 @@ class TemplateElement:
         minitel.pos(y, x)
         if self.inverse_to_display:
             minitel.inverse()
-        minitel._print('{:<{width}}'.format(self.lines[element_line], width=width))
+        minitel.print('{:<{width}}'.format(self.lines[element_line], width=width))
         if len(self.last_displayed)<=element_line:
             self.last_displayed.append({"line": self.lines[element_line], "inversed": self.inverse_to_display, "x": x, "y": y})
         else:

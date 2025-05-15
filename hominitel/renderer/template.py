@@ -16,12 +16,12 @@ class Template:
     def show_title(self):
         self.minitel.vtab(0)
         self.minitel.inverse()
-        self.minitel._print(self.title)
+        self.minitel.print(self.title)
     
     def show_helper(self):
         self.minitel.vtab(24)
         self.minitel.inverse()
-        self.minitel._print(self.helper)
+        self.minitel.print(self.helper)
     
     def show(self):
         self.show_title()

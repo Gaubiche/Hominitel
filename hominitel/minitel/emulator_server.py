@@ -33,7 +33,7 @@ class MinitelSimu:
         self.inverse_off()
         self.win.refresh()
 
-    def _print(self, text: str):
+    def print(self, text: str):
         for ch in text:
             if self.col >= self.cols:
                 self.row += 1
@@ -66,7 +66,7 @@ async def websocket_endpoint(websocket: WebSocket):
             cmd = json.loads(data)
 
             if cmd["type"] == "print":
-                minitel._print(cmd["text"])
+                minitel.print(cmd["text"])
 
             elif cmd["type"] == "pos":
                 minitel.pos(cmd["row"], cmd["col"])

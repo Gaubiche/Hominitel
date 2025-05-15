@@ -1,5 +1,5 @@
 import time
-from hominitel import config
+from hominitel.config import config
 
 try:
     import network

@@ -1,7 +1,7 @@
 from hominitel.renderer.template_element import TemplateElement
 
-class Selectable():
-    def __init__(self, minitel, content):
+class Selectable:
+    def __init__(self, content):
         self.is_selected = False
         self.template_element = TemplateElement(content, lambda: self.inverse())
         self.content = content
