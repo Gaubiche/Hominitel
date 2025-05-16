@@ -1,5 +1,5 @@
 class Adapter:
-    def _print(self, text: str):
+    def print(self, text: str):
         raise NotImplementedError("_print method must be implemented")
 
     def pos(self, row: int, col: int):
@@ -14,5 +14,5 @@ class Adapter:
     def echo_off(self):
         raise NotImplementedError("echo_off method must be implemented")
 
-    def _if(self):
+    def get_input(self):
         raise NotImplementedError("read method must be implemented")
