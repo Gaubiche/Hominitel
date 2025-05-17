@@ -14,3 +14,21 @@ class SpecialCharacters:
     CANCEL = '\x13E'
     SUMMARY = '\x13F'
     CORRECT = '\x13G'
+
+    list = [
+        ENTER,
+        TAB,
+        SPACE,
+        ESCAPE,
+        ARROW_UP,
+        ARROW_DOWN,
+        ARROW_RIGHT,
+        ARROW_LEFT,
+        SEND,
+        BACK,
+        REPEAT,
+        GUIDE,
+        CANCEL,
+        SUMMARY,
+        CORRECT
+    ]

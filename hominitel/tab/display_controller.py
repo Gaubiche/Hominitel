@@ -47,7 +47,7 @@ class DisplayController:
         self.current_tab = tab
         self.current_tab.should_stop = False
 
-    def on_key(self, value):
+    def on_keys(self, value):
         self.current_tab.buffer += value
 
     def run(self):
