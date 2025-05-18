@@ -7,7 +7,7 @@ class Tab:
     """
     def __init__(self, description=""):
         self.description = description
-        self.buffer = ""
+        self.buffer = []
         self.should_stop = False
 
     def run(self):

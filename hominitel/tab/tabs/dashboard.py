@@ -1,5 +1,6 @@
 import time
 
+from hominitel.minitel.command_bar_state import CommandBarState
 from hominitel.minitel.minitel import minitel
 from hominitel.config import config
 from hominitel.minitel.special_characters import SpecialCharacters
@@ -9,7 +10,7 @@ from hominitel.home_assistant.entity_controller import EntityController
 from hominitel.home_assistant.input_select_controller import InputSelectController
 from hominitel.home_assistant.light_controller import LightController
 from hominitel.tab.tab import Tab
-from hominitel.minitel.command_bar import command_bar
+from hominitel.minitel.command_bar import CommandBar
 
 class Dashboard(Tab):
     def __init__(self):
@@ -20,6 +21,9 @@ class Dashboard(Tab):
         self.selected_index = 0
         self.display_registry = RenderRegistry(top=1, bottom=40)
         self.entities_updater = EntitiesUpdater()
+        self.command_bar = CommandBar()
+        keymap_state = CommandBarState("default", "↑↓: Browse, Enter: Toggle")
+        self.command_bar.register(keymap_state, True)
         for controller in self.controllers:
             self.display_registry.register(controller.get_template_element())
             self.entities_updater.register(controller)
@@ -36,7 +40,7 @@ class Dashboard(Tab):
         minitel.cls()
         self.entities_updater.start()
         self.display_registry.display()
-        command_bar.display()
+        self.command_bar.display()
         while True:
             while self.buffer:
                 char = self.buffer[0]
@@ -44,10 +48,13 @@ class Dashboard(Tab):
                 if char == SpecialCharacters.ARROW_DOWN:
                     self.selected_index = (self.selected_index + 1) % len(self.controllers)
                     self.update_selected()
+                if char == SpecialCharacters.ARROW_UP:
+                    self.selected_index = (self.selected_index - 1) % len(self.controllers)
+                    self.update_selected()
                 elif char == "\r":
                     self.controllers[self.selected_index].trigger()
             self.display_registry.update()
-            command_bar.update()
+            self.command_bar.update()
             if self.should_stop:
                 self.entities_updater.running = False
                 return
