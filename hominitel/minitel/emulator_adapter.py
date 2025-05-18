@@ -4,7 +4,7 @@ import json
 import threading
 
 from hominitel.minitel.adapter import Adapter
-from hominitel.minitel.special_characters import SpecialCharacters
+from hominitel.minitel.special_characters import SpecialCharacters, SPECIAL_CHARACTER_NAMES
 
 
 class EmulatorAdapter(Adapter):
@@ -80,6 +80,8 @@ class EmulatorAdapter(Adapter):
                 val = self.input_buffer.pop(0)
                 if val == "":
                     return SpecialCharacters.ENTER
+                if val in SPECIAL_CHARACTER_NAMES:
+                    return getattr(SpecialCharacters, val)
                 return val.replace("\n", "")
         return None
 

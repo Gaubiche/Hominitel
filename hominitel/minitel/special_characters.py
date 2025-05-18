@@ -2,11 +2,11 @@ class SpecialCharacters:
     ENTER = '\r'
     TAB = '\t'
     SPACE = ' '
-    ESCAPE = '\x1b'
     ARROW_UP = '\x1b[A'
     ARROW_DOWN = '\x1b[B'
     ARROW_RIGHT = '\x1b[C'
     ARROW_LEFT = '\x1b[D'
+    ESCAPE = '\x1b'
     SEND = '\x13A'
     BACK = '\x13B'
     REPEAT = '\x13C'
@@ -15,20 +15,5 @@ class SpecialCharacters:
     SUMMARY = '\x13F'
     CORRECT = '\x13G'
 
-    list = [
-        ENTER,
-        TAB,
-        SPACE,
-        ESCAPE,
-        ARROW_UP,
-        ARROW_DOWN,
-        ARROW_RIGHT,
-        ARROW_LEFT,
-        SEND,
-        BACK,
-        REPEAT,
-        GUIDE,
-        CANCEL,
-        SUMMARY,
-        CORRECT
-    ]
+SPECIAL_CHARACTER_LIST = [getattr(SpecialCharacters, name) for name in dir(SpecialCharacters) if not name.startswith("__") and not callable(getattr(SpecialCharacters, name))]
+SPECIAL_CHARACTER_NAMES = [name for name in dir(SpecialCharacters) if not name.startswith("__") and not callable(getattr(SpecialCharacters, name))]

@@ -1,7 +1,8 @@
 import _thread
 import time
 
-from hominitel.minitel.special_characters import SpecialCharacters
+from hominitel.minitel.special_characters import SPECIAL_CHARACTER_LIST
+
 
 class KeyboardListener:
     def __init__(self, display_controller):
@@ -27,12 +28,15 @@ class KeyboardListener:
         i = 0
         res = []
         while i < len(input_str):
-            for special_char in SpecialCharacters.list:
+            should_break = False
+            for special_char in SPECIAL_CHARACTER_LIST:
                 if input_str[i:].startswith(special_char):
                     res.append(special_char)
                     i += len(special_char)
+                    should_break = True
                     break
+            if should_break:
+                continue
             res.append(input_str[i])
-            i += 1
+            i += len(res[-1])
         return res
-
