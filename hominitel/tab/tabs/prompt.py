@@ -33,7 +33,7 @@ class HomeAssistantAPI:
         minitel.vtab(self.line)
     
     def wait_for_input(self):
-        last_char = self.minitel.get_input()
+        last_char = minitel.get_input()
         buffer = ""
         while '\r' not in str(last_char):
             if last_char == '\x13E':
@@ -42,7 +42,7 @@ class HomeAssistantAPI:
                 minitel._del(self.line, 1)
                 minitel.print("> ")
             minitel.cursor(True)
-            last_char = self.minitel.get_input()
+            last_char = minitel.get_input()
             if last_char is not None:
                 if isinstance(last_char, bytes):
                     last_char = last_char.decode('utf-8')

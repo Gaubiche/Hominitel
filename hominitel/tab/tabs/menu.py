@@ -11,8 +11,8 @@ class Menu(Tab):
         self.display_registry = RenderRegistry()
         self.tabs = tabs
         self.display_registry.register(TemplateElement("Main menu"))
-        for key, tab in self.tabs.items():
-            self.display_registry.register(TemplateElement(f"{key}: {tab.description}\n"))
+        for i, (name, tab) in enumerate(self.tabs.items()):
+            self.display_registry.register(TemplateElement(f"{i}. {name}: {tab.description}\n"))
 
     def run(self):
         minitel.cls()

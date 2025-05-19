@@ -9,6 +9,7 @@ class Tab:
         self.description = description
         self.buffer = []
         self.should_stop = False
+        self.next_tab = None
 
     def run(self):
         pass

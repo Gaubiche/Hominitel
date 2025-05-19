@@ -20,22 +20,22 @@ class DisplayController:
         self.tabs = {}
         self.current_tab = None
         self.default_tab = None
-        self.register_tab(HelloWorld(), 'H')
-        self.register_tab(Dashboard(), 'D', True)
-        self.register_tab(Prompt(), 'P')
-        self.register_tab(Menu(self.tabs), 'M')
+        self.register_tab(HelloWorld(), 'hello-world')
+        self.register_tab(Dashboard(), 'dashboard', True)
+        self.register_tab(Prompt(), 'prompt')
+        self.register_tab(Menu(self.tabs), 'menu')
         self.keyboard_listener = KeyboardListener(self)
 
-    def register_tab(self, tab: Tab, key, default=False):
-        self.tabs[key] = tab
+    def register_tab(self, tab: Tab, name, default=False):
+        self.tabs[name] = tab
         if default:
             self.default_tab = tab
 
     def is_tab_launch_key(self, key):
         return key in self.tabs.keys()
 
-    def open_tab_from_key(self, key):
-        tab = self.tabs[key]
+    def open_tab_from_name(self, name):
+        tab = self.tabs[name]
         self.open_tab(tab)
 
     def open_tab(self, tab):
@@ -52,3 +52,4 @@ class DisplayController:
         self.open_tab(self.default_tab)
         while True:
             self.current_tab.run()
+            self.open_tab_from_name(self.current_tab.next_tab)
