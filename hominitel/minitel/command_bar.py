@@ -33,3 +33,5 @@ class CommandBar:
 command_bar = CommandBar()
 command_bar.register(CommandBarState("dashboard-default", "↑↓: Browse, Enter: Toggle"))
 command_bar.register(CommandBarState("navigation", "Enter: Go to menu, Esc: Back"))
+command_bar.register(CommandBarState("menu-default", "↑↓: Browse, Enter: Open tab"))
+command_bar.register(CommandBarState("prompt-default", "> "))
