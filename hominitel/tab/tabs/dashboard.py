@@ -18,8 +18,6 @@ class Dashboard(Tab):
         self.controllers = []
         for entity in config.DASHBOARD_TAB["entities"]:
             self.controllers.append(self.controller_from_entity(entity))
-        self.selected_index = 0
-        self.current_state = "default"
         self.state_actions = {
             "default": self.default,
             "navigation": self.navigation,
@@ -29,7 +27,9 @@ class Dashboard(Tab):
         for controller in self.controllers:
             self.display_registry.register(controller.get_template_element())
             self.entities_updater.register(controller)
+        self.selected_index = 0
         self.update_selected()
+        self.current_state = "default"
 
     def update_selected(self):
         for i, controller in enumerate(self.controllers):
@@ -39,6 +39,10 @@ class Dashboard(Tab):
                 controller.deselect()
 
     def run(self):
+        self.should_stop = False
+        self.selected_index = 0
+        self.update_selected()
+        self.current_state = "default"
         minitel.cls()
         command_bar.set_state("dashboard-default")
         self.entities_updater.start()
