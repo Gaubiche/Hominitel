@@ -14,7 +14,7 @@ The goal of this project is to **turn a Minitel into a Home Assistant control in
 
 ## TODO
 - [ ] Add prompt mode
-- [ ] Add keymaps on screen
+- [x] Add keymaps on screen
 - [ ] Add a startup screen
 - [ ] Add a way to make the configuration through the Minitel (wifi, api url, api token)
 - [ ] Add a way to customize the dashboard on the Minitel (e.g., add/remove entities, change layout, reorder, ...)
