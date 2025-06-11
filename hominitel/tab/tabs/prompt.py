@@ -1,63 +1,66 @@
 import time
 
+from hominitel.home_assistant.home_assistant import home_assistant_api
+from hominitel.minitel.command_bar import command_bar
 from hominitel.minitel.minitel import minitel
+from hominitel.minitel.special_characters import SpecialCharacters, SPECIAL_CHARACTER_LIST
+from hominitel.renderer.render_registry import RenderRegistry
+from hominitel.renderer.template_element import TemplateElement
 from hominitel.tab.tab import Tab
 
 
 class Prompt(Tab):
     def __init__(self):
         super().__init__(description="Prompt Mode for Home Assistant")
+        self.current_state = "default"
+        self.state_actions = {
+            "default": self.default,
+            "navigation": self.navigation,
+        }
+        self.input = ""
+        self.response = ""
+        self.display_registry = RenderRegistry()
+        self.display_registry.register(TemplateElement(self.get_input, True))
+        self.display_registry.register(TemplateElement(self.get_response, True))
+
+    def get_input(self):
+        return "> " + self.input
+
+    def get_response(self):
+        return " " * 6 + self.response
 
     def run(self):
+        self.should_stop = False
+        self.current_state = "default"
         minitel.cls()
-        minitel.print("Bonjour, je suis ChatGPT")
+        command_bar.set_state("prompt-default")
         while True:
-            time.sleep(0.1)
+            while self.buffer:
+                char = self.buffer[0]
+                self.buffer = self.buffer[1:]
+                self.on_key(char)
+            self.display_registry.update()
+            time.sleep(0.01)
 
-class HomeAssistantAPI:
-    def __init__(self, url: str, token: str):
-        self.url = url
-        self.token = token
-        self.conversation_id = None
-    
-    def send_command(self, text: str, language: str = "fr") -> str:
-        pass
-        
-    def print(self, message: str, is_assistant: bool = False):
-        if is_assistant:
-            minitel.pos(self.line, 10)
-        minitel.print("> " + message)
-        print(len("> " + message))
-        print("> " + message)
-        self.line += 2 + (len(message) + (10 if is_assistant else 0))//40
-        minitel.vtab(self.line)
-    
-    def wait_for_input(self):
-        last_char = minitel.get_input()
-        buffer = ""
-        while '\r' not in str(last_char):
-            if last_char == '\x13E':
-                buffer = ""
-                minitel.vtab(self.line)
-                minitel._del(self.line, 1)
-                minitel.print("> ")
-            minitel.cursor(True)
-            last_char = minitel.get_input()
-            if last_char is not None:
-                if isinstance(last_char, bytes):
-                    last_char = last_char.decode('utf-8')
-                buffer += last_char
-            time.sleep(1)
-        self.line += 2
-        minitel.vtab(self.line)
-        return buffer
+    def on_key(self, char):
+        self.state_actions[self.current_state](char)
 
-        
-if __name__ == "__main__":
+    def default(self, char):
+        if char == SpecialCharacters.ENTER:
+            self.response = home_assistant_api.prompt(self.input)
+            self.input = ""
+            return
+        if char == SpecialCharacters.ARROW_LEFT:
+            if self.input:
+                self.input = self.input[:-1]
+            return
+        if char in SPECIAL_CHARACTER_LIST:
+            return
+        self.input += char
 
-    while(True):
-        buffer = minitel.wait_for_input()
-        minitel.clear_and_display(buffer)
-        response = home_assistant_api.send_command(buffer)
-        minitel.print(str(response["response"]["speech"]["plain"]["speech"]), True)
-
+    def navigation(self, char):
+        if char == SpecialCharacters.ESCAPE:
+            command_bar.set_state("dashboard-default")
+        elif char == SpecialCharacters.ENTER:
+            self.should_stop = True
+            self.next_tab = "menu"

@@ -9,6 +9,7 @@ class HomeAssistantAPI:
         self.api_token = config.HA_API_TOKEN
         self.wifi_connection = WiFiConnection()
         self.wifi_connection.connect()
+        self.conversation_id = None
 
     def get_state(self, entity_id="light.salon"):
         url = f"{self.api_url}/states/{entity_id}"
@@ -30,10 +31,9 @@ class HomeAssistantAPI:
         return response.json()
 
     def prompt(self, text, conversation_id=None):
-        url = f"{self.api_url}/services/conversation/process"
+        url = f"{self.api_url}/conversation/process"
         payload = {
-            "text": text.lower(),
-            "agent_id": "conversation.chatgpt"
+            "text": text.lower()
         }
         if conversation_id is not None:
             payload["conversation_id"]= conversation_id
@@ -43,6 +43,9 @@ class HomeAssistantAPI:
             'Authorization': self.api_token
         }
         response = post(url, headers=headers, json=payload)
-        return response.json()
+        response_json = response.json()
+        response.close()
+        self.conversation_id = response_json["conversation_id"]
+        return response_json.get("response", {}).get("speech", {}).get("plain", {}).get("speech", "")
 
 home_assistant_api = HomeAssistantAPI()
