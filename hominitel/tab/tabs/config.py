@@ -8,6 +8,8 @@ from hominitel.renderer.template_element import TemplateElement
 from hominitel.tab.tab import Tab
 from hominitel.minitel.command_bar import command_bar
 from hominitel.config import config
+from hominitel.controller.selectable import Selectable
+
 
 class ConfigTab(Tab):
     def __init__(self):
@@ -19,19 +21,63 @@ class ConfigTab(Tab):
             "add_entity": self.add_entity,
             "remove_entity": self.remove_entity,
         }
-        self.selected_index = 0
         self.display_registry = RenderRegistry()
-        self.update_display()
+        self.template_elements = []
+        self.controllers = []
+        self.selected_index = 0
+        self.init_display()
+
+    def init_display(self):
+        self.display_registry = RenderRegistry()
+        self.template_elements = []
+        self.controllers = []
+        
+        # Title
+        title = TemplateElement("Dashboard Entities Configuration")
+        self.display_registry.register(title)
+        self.template_elements.append(title)
+        
+        # Empty line
+        empty_line = TemplateElement("")
+        self.display_registry.register(empty_line)
+        self.template_elements.append(empty_line)
+        
+        # Entity lines
+        for entity in config.DASHBOARD_TAB["entities"]:
+            controller = Selectable(f"{entity}\n")
+            self.display_registry.register(controller.get_template_element())
+            self.controllers.append(controller)
+            self.template_elements.append(controller.get_template_element())
+        
+        self.update_selected()
+
+    def update_selected(self):
+        for i, controller in enumerate(self.controllers):
+            if i == self.selected_index:
+                controller.select()
+            else:
+                controller.deselect()
 
     def update_display(self):
-        self.display_registry = RenderRegistry()
-        self.display_registry.register(TemplateElement("Dashboard Entities Configuration"))
-        self.display_registry.register(TemplateElement(""))
-        
-        # Display current entities
+        # Update controllers
         for i, entity in enumerate(config.DASHBOARD_TAB["entities"]):
-            prefix = "→ " if i == self.selected_index else "  "
-            self.display_registry.register(TemplateElement(f"{prefix}{entity}"))
+            if i >= len(self.controllers):
+                # Add new controller if needed
+                controller = Selectable(f"{entity}\n")
+                self.display_registry.register(controller.get_template_element())
+                self.controllers.append(controller)
+                self.template_elements.append(controller.get_template_element())
+            else:
+                # Update existing controller
+                self.controllers[i].set_text(f"{entity}\n")
+        
+        # Remove extra controllers if we have fewer entities than before
+        while len(self.controllers) > len(config.DASHBOARD_TAB["entities"]):
+            self.display_registry.elements.pop()
+            self.template_elements.pop()
+            self.controllers.pop()
+        
+        self.update_selected()
 
     def save_config(self):
         config.save()
@@ -56,11 +102,11 @@ class ConfigTab(Tab):
 
     def default(self, char):
         if char == SpecialCharacters.ARROW_DOWN:
-            self.selected_index = (self.selected_index + 1) % len(config.DASHBOARD_TAB["entities"])
-            self.update_display()
+            self.selected_index = (self.selected_index + 1) % len(self.controllers)
+            self.update_selected()
         elif char == SpecialCharacters.ARROW_UP:
-            self.selected_index = (self.selected_index - 1) % len(config.DASHBOARD_TAB["entities"])
-            self.update_display()
+            self.selected_index = (self.selected_index - 1) % len(self.controllers)
+            self.update_selected()
         elif char == SpecialCharacters.SUMMARY:
             self.current_state = "navigation"
             command_bar.set_state("config-navigation")
@@ -103,11 +149,11 @@ class ConfigTab(Tab):
             # Remove the selected entity
             if config.DASHBOARD_TAB["entities"]:
                 config.DASHBOARD_TAB["entities"].pop(self.selected_index)
-                self.selected_index = min(self.selected_index, len(config.DASHBOARD_TAB["entities"]) - 1)
                 self.save_config()
-            self.current_state = "default"
-            command_bar.set_state("config-default")
-            self.update_display()
+                self.current_state = "default"
+                command_bar.set_state("config-default")
+                self.selected_index = min(self.selected_index, len(config.DASHBOARD_TAB["entities"]) - 1)
+                self.update_display()
         elif char == SpecialCharacters.ESCAPE:
             self.current_state = "default"
             command_bar.set_state("config-default") 
