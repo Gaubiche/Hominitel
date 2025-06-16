@@ -1,7 +1,6 @@
 class SpecialCharacters:
     ENTER = '\r'
     TAB = '\t'
-    SPACE = ' '
     ARROW_UP = '\x1b[A'
     ARROW_DOWN = '\x1b[B'
     ARROW_RIGHT = '\x1b[C'

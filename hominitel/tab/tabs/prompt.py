@@ -40,7 +40,8 @@ class Prompt(Tab):
                 self.buffer = self.buffer[1:]
                 self.on_key(char)
             self.display_registry.update()
-            time.sleep(0.01)
+            if self.should_stop:
+                return
 
     def on_key(self, char):
         self.state_actions[self.current_state](char)
@@ -54,13 +55,18 @@ class Prompt(Tab):
             if self.input:
                 self.input = self.input[:-1]
             return
+        if char == SpecialCharacters.SUMMARY:
+            self.current_state = "navigation"
+            command_bar.set_state("prompt-navigation")
+            return
         if char in SPECIAL_CHARACTER_LIST:
             return
         self.input += char
 
     def navigation(self, char):
         if char == SpecialCharacters.ESCAPE:
-            command_bar.set_state("dashboard-default")
+            self.current_state = "default"
+            command_bar.set_state("prompt-default")
         elif char == SpecialCharacters.ENTER:
             self.should_stop = True
             self.next_tab = "menu"

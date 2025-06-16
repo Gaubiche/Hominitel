@@ -30,7 +30,7 @@ class Config:
     def save(self):
         config_data = {field: getattr(self, field) for field in self.FIELDS}
         with open("config.json", "w") as file:
-            json.dump(config_data, file, indent=4)
+            json.dump(config_data, file)
 
 config = Config() # global config variable
 config.load()

@@ -35,6 +35,7 @@ command_bar.register(CommandBarState("dashboard-default", "↑↓: Browse, Enter
 command_bar.register(CommandBarState("navigation", "Enter: Go to menu, Esc: Back"))
 command_bar.register(CommandBarState("menu-default", "↑↓: Browse, Enter: Open tab"))
 command_bar.register(CommandBarState("prompt-default", "> "))
+command_bar.register(CommandBarState("prompt-navigation", "Enter: Go to menu, Esc: Back"))
 command_bar.register(CommandBarState("config-default", "↑↓: Browse, Enter: Remove, Send: Add"))
 command_bar.register(CommandBarState("config-navigation", "Enter: Go to menu, Esc: Back"))
 command_bar.register(CommandBarState("config-add", "Enter: Add entity, Esc: Cancel"))

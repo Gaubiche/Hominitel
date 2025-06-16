@@ -30,13 +30,13 @@ class HomeAssistantAPI:
         response = post(url, headers=headers, json=data)
         return response.json()
 
-    def prompt(self, text, conversation_id=None):
+    def prompt(self, text):
         url = f"{self.api_url}/conversation/process"
         payload = {
             "text": text.lower()
         }
-        if conversation_id is not None:
-            payload["conversation_id"]= conversation_id
+        if self.conversation_id is not None:
+            payload["conversation_id"]= self.conversation_id
 
         headers = {
             'Content-Type': 'text/plain',

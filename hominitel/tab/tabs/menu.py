@@ -17,7 +17,7 @@ class Menu(Tab):
         self.tab_names = []
         self.display_registry.register(TemplateElement("Main menu"))
         for i, (name, tab) in enumerate(tabs.items()):
-            controller = Selectable(f"{name}: {tab.description}\n")
+            controller = Selectable(f"{name}: {tab.description}")
             self.tab_names.append(name)
             self.display_registry.register(controller.get_template_element())
             self.controllers.append(controller)

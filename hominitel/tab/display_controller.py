@@ -2,7 +2,6 @@ import _thread
 
 from hominitel.minitel.command_bar_state import CommandBarState
 from hominitel.tab.tab import Tab
-from hominitel.tab.tabs.hello_world import HelloWorld
 from hominitel.tab.tabs.menu import Menu
 from hominitel.minitel.keyboard_listener import KeyboardListener
 from hominitel.tab.tabs.dashboard import Dashboard
@@ -21,7 +20,6 @@ class DisplayController:
         self.tabs = {}
         self.current_tab = None
         self.default_tab = None
-        self.register_tab(HelloWorld(), 'hello-world')
         self.register_tab(Dashboard(), 'dashboard', True)
         self.register_tab(Prompt(), 'prompt')
         self.register_tab(ConfigTab(), 'config')

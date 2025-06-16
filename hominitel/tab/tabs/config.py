@@ -44,7 +44,7 @@ class ConfigTab(Tab):
         
         # Entity lines
         for entity in config.DASHBOARD_TAB["entities"]:
-            controller = Selectable(f"{entity}\n")
+            controller = Selectable(entity)
             self.display_registry.register(controller.get_template_element())
             self.controllers.append(controller)
             self.template_elements.append(controller.get_template_element())
@@ -59,28 +59,37 @@ class ConfigTab(Tab):
                 controller.deselect()
 
     def update_display(self):
-        # Update controllers
-        for i, entity in enumerate(config.DASHBOARD_TAB["entities"]):
-            if i >= len(self.controllers):
-                # Add new controller if needed
-                controller = Selectable(f"{entity}\n")
-                self.display_registry.register(controller.get_template_element())
-                self.controllers.append(controller)
-                self.template_elements.append(controller.get_template_element())
-            else:
-                # Update existing controller
-                self.controllers[i].set_text(f"{entity}\n")
-        
-        # Remove extra controllers if we have fewer entities than before
-        while len(self.controllers) > len(config.DASHBOARD_TAB["entities"]):
+        # Remove all existing controllers and template elements
+        while self.controllers:
             self.display_registry.elements.pop()
             self.template_elements.pop()
             self.controllers.pop()
+        
+        # Recreate controllers in the new order
+        for entity in config.DASHBOARD_TAB["entities"]:
+            controller = Selectable(entity)
+            self.display_registry.register(controller.get_template_element())
+            self.controllers.append(controller)
+            self.template_elements.append(controller.get_template_element())
         
         self.update_selected()
 
     def save_config(self):
         config.save()
+
+    def move_selected_up(self):
+        if self.selected_index > 0:
+            config.DASHBOARD_TAB["entities"][self.selected_index], config.DASHBOARD_TAB["entities"][self.selected_index - 1] = config.DASHBOARD_TAB["entities"][self.selected_index - 1], config.DASHBOARD_TAB["entities"][self.selected_index]
+            self.selected_index -= 1
+            self.save_config()
+            self.update_display()
+
+    def move_selected_down(self):
+        if self.selected_index < len(config.DASHBOARD_TAB["entities"]) - 1:
+            config.DASHBOARD_TAB["entities"][self.selected_index], config.DASHBOARD_TAB["entities"][self.selected_index + 1] = config.DASHBOARD_TAB["entities"][self.selected_index + 1], config.DASHBOARD_TAB["entities"][self.selected_index]
+            self.selected_index += 1
+            self.save_config()
+            self.update_display()
 
     def run(self):
         self.should_stop = False
@@ -116,6 +125,10 @@ class ConfigTab(Tab):
         elif char == SpecialCharacters.SEND:
             self.current_state = "add_entity"
             command_bar.set_state("config-add")
+        elif char == SpecialCharacters.BACK:
+            self.move_selected_up()
+        elif char == SpecialCharacters.REPEAT:
+            self.move_selected_down()
 
     def navigation(self, char):
         if char == SpecialCharacters.ESCAPE:
