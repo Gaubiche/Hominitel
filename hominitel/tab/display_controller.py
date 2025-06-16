@@ -7,6 +7,7 @@ from hominitel.tab.tabs.menu import Menu
 from hominitel.minitel.keyboard_listener import KeyboardListener
 from hominitel.tab.tabs.dashboard import Dashboard
 from hominitel.tab.tabs.prompt import Prompt
+from hominitel.tab.tabs.config import ConfigTab
 from hominitel.minitel.special_characters import SpecialCharacters
 
 
@@ -23,6 +24,7 @@ class DisplayController:
         self.register_tab(HelloWorld(), 'hello-world')
         self.register_tab(Dashboard(), 'dashboard', True)
         self.register_tab(Prompt(), 'prompt')
+        self.register_tab(ConfigTab(), 'config')
         self.register_tab(Menu(self.tabs), 'menu')
         self.keyboard_listener = KeyboardListener(self)
 
