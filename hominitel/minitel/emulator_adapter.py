@@ -85,3 +85,13 @@ class EmulatorAdapter(Adapter):
                 return val.replace("\n", "")
         return None
 
+    def message(self, row: int, col: int, delay: int, message: str, bip: bool = False):
+        self.send_command({
+            "type": "message", 
+            "row": row, 
+            "col": col, 
+            "delay": delay, 
+            "message": message, 
+            "bip": bip
+        })
+

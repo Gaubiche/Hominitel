@@ -8,6 +8,7 @@ from hominitel.home_assistant.entities_updater import EntitiesUpdater
 from hominitel.home_assistant.entity_controller import EntityController
 from hominitel.home_assistant.input_select_controller import InputSelectController
 from hominitel.home_assistant.light_controller import LightController
+from hominitel.home_assistant.notification_monitor import NotificationMonitor
 from hominitel.tab.tab import Tab
 from hominitel.minitel.command_bar import command_bar
 
@@ -30,6 +31,9 @@ class Dashboard(Tab):
         self.selected_index = 0
         self.update_selected()
         self.current_state = "default"
+        
+        # Initialize notification monitor
+        self.notification_monitor = NotificationMonitor()
 
     def update_selected(self):
         for i, controller in enumerate(self.controllers):
@@ -46,6 +50,7 @@ class Dashboard(Tab):
         minitel.cls()
         command_bar.set_state("dashboard-default")
         self.entities_updater.start()
+        self.notification_monitor.start()  # Start notification monitoring
         self.display_registry.display()
         command_bar.display()
         while True:
@@ -57,6 +62,7 @@ class Dashboard(Tab):
             command_bar.update()
             if self.should_stop:
                 self.entities_updater.running = False
+                self.notification_monitor.stop()  # Stop notification monitoring
                 return
             time.sleep(0.1)
 

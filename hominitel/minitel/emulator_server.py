@@ -52,6 +52,33 @@ class MinitelSimu:
         self.win.refresh()
         self.row, self.col = 0, 0
 
+    def message(self, row: int, col: int, delay: int, message: str, bip: bool = False):
+        """Displays a temporary message with optional sound beep"""
+        # Save current position
+        old_row, old_col = self.row, self.col
+        
+        # Position cursor
+        self.pos(row, col)
+        
+        # Display message
+        self.print(message)
+        
+        # Simulate sound beep (display special character)
+        if bip:
+            self.print(" [BEEP]")
+        
+        # Wait for specified delay
+        time.sleep(delay)
+        
+        # Clear message
+        self.pos(row, col)
+        for _ in range(len(message) + (6 if bip else 0)):  # 6 characters for "[BEEP]"
+            self.win.addch(self.row, self.col, ' ')
+            self.col += 1
+        
+        # Restore position
+        self.pos(old_row, old_col)
+
 
 minitel =  curses.wrapper(MinitelSimu)
 minitel.cls()
@@ -76,6 +103,15 @@ async def websocket_endpoint(websocket: WebSocket):
 
             elif cmd["type"] == "inverse":
                 minitel.inverse()
+
+            elif cmd["type"] == "message":
+                minitel.message(
+                    cmd["row"], 
+                    cmd["col"], 
+                    cmd["delay"], 
+                    cmd["message"], 
+                    cmd.get("bip", False)
+                )
 
         except Exception as e:
             print(f"WebSocket error: {e}")

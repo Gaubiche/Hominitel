@@ -12,3 +12,6 @@ class PynitelAdapter(Pynitel, Adapter):
         if isinstance(last_char, bytes):
             return last_char.decode('utf-8')
         return last_char
+
+    def message(self, row: int, col: int, delay: int, message: str, bip: bool = False):
+        super().message(row, col, delay, message, bip)

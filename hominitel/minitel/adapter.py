@@ -16,3 +16,6 @@ class Adapter:
 
     def get_input(self):
         raise NotImplementedError("read method must be implemented")
+
+    def message(self, row: int, col: int, delay: int, message: str, bip: bool = False):
+        raise NotImplementedError("message method must be implemented")

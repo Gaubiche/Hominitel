@@ -9,6 +9,7 @@ class Config:
         "WIFI_PASSWORD",
         # tab configurations
         "DASHBOARD_TAB",
+        "NOTIFICATION_ENTITY", # Entity to monitor for notifications
     ]
 
     def __init__(self):
