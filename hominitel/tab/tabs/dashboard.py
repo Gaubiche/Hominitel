@@ -50,7 +50,9 @@ class Dashboard(Tab):
         minitel.cls()
         command_bar.set_state("dashboard-default")
         self.entities_updater.start()
-        self.notification_monitor.start()  # Start notification monitoring
+        # Only start notification monitoring if not already running
+        if not self.notification_monitor.running or self.notification_monitor.notification_entity is None:
+            self.notification_monitor.start()
         self.display_registry.display()
         command_bar.display()
         while True:
@@ -62,7 +64,7 @@ class Dashboard(Tab):
             command_bar.update()
             if self.should_stop:
                 self.entities_updater.running = False
-                self.notification_monitor.stop()  # Stop notification monitoring
+                # Don't stop notification monitor here, let it run globally
                 return
             time.sleep(0.1)
 

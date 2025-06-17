@@ -1,5 +1,6 @@
 from hominitel.tab.display_controller import DisplayController
 from hominitel.minitel.minitel import minitel
+from hominitel.home_assistant.notification_monitor import NotificationMonitor
 
 class System:
     """
@@ -13,4 +14,12 @@ class System:
         self.application_handler = DisplayController()
 
     def run(self):
-        self.application_handler.run()
+        try:
+            self.application_handler.run()
+        except KeyboardInterrupt:
+            print("Shutting down...")
+        finally:
+            # Clean up notification monitor
+            notification_monitor = NotificationMonitor()
+            notification_monitor.stop()
+            print("Notification monitor stopped.")

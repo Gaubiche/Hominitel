@@ -5,28 +5,40 @@ from hominitel.minitel.minitel import minitel
 from hominitel.config import config
 
 class NotificationMonitor:
+    _instance = None
+    _initialized = False
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(NotificationMonitor, cls).__new__(cls)
+        return cls._instance
+    
     def __init__(self):
-        self.notification_entity = None
-        self.last_notification_value = None
-        self.running = True
+        if not self._initialized:
+            self.notification_entity = None
+            self.last_notification_value = None
+            self.running = True
+            self._initialized = True
 
     def start(self):
         """Starts monitoring the configured notification entity"""
-        try:
-            # Use the configured entity or a default value
-            notification_entity_id = getattr(config, 'NOTIFICATION_ENTITY', 'input_text.notification')
-            
-            if notification_entity_id:
-                self.notification_entity = Entity(notification_entity_id)
-                self.last_notification_value = self.notification_entity.get_state_string()
-                self.running = True
-                _thread.start_new_thread(self.run, ())
-                print(f"Notification monitoring activated for entity: {notification_entity_id}")
-            else:
-                print("No notification entity configured")
+        # Only start if not already running
+        if self.running and self.notification_entity is None:
+            try:
+                # Use the configured entity or a default value
+                notification_entity_id = getattr(config, 'NOTIFICATION_ENTITY', 'input_text.notification')
                 
-        except Exception as e:
-            print(f"Error initializing notification monitoring: {e}")
+                if notification_entity_id:
+                    self.notification_entity = Entity(notification_entity_id)
+                    self.last_notification_value = self.notification_entity.get_state_string()
+                    self.running = True
+                    _thread.start_new_thread(self.run, ())
+                    print(f"Notification monitoring activated for entity: {notification_entity_id}")
+                else:
+                    print("No notification entity configured")
+                    
+            except Exception as e:
+                print(f"Error initializing notification monitoring: {e}")
 
     def run(self):
         """Main loop for monitoring notifications"""
@@ -53,4 +65,7 @@ class NotificationMonitor:
 
     def stop(self):
         """Stops notification monitoring"""
-        self.running = False 
+        self.running = False
+        # Reset entity to allow restart if needed
+        self.notification_entity = None
+        self.last_notification_value = None 
