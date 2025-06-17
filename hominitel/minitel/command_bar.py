@@ -7,8 +7,9 @@ class CommandBar:
     def __init__(self):
         self.states = []
         self.current_state = None
+        self.dynamic_content_callback = None
         self.render_registry = RenderRegistry(top=23, bottom=25)
-        self.render_registry.register(TemplateElement(self.content, True))
+        self.render_registry.register(TemplateElement(self.content))
 
     def register(self, state):
         self.states.append(state)
@@ -17,11 +18,25 @@ class CommandBar:
         for state in self.states:
             if state.name == state_string:
                 self.current_state = state
+                # Clear dynamic content when changing state
+                self.dynamic_content_callback = None
                 self.render_registry.update()
                 return
         raise ValueError(f"State {state_string} not found in command bar states.")
 
+    def set_dynamic_content(self, callback):
+        """Set a callback function that returns dynamic content for the command bar"""
+        self.dynamic_content_callback = callback
+        self.render_registry.update()
+
+    def clear_dynamic_content(self):
+        """Clear the dynamic content and return to static state content"""
+        self.dynamic_content_callback = None
+        self.render_registry.update()
+
     def content(self):
+        if self.dynamic_content_callback:
+            return self.dynamic_content_callback()
         return self.current_state.content if self.current_state else ""
 
     def display(self):

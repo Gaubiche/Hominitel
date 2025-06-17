@@ -20,27 +20,32 @@ class Prompt(Tab):
         self.input = ""
         self.response = ""
         self.display_registry = RenderRegistry()
-        self.display_registry.register(TemplateElement(self.get_input, True))
-        self.display_registry.register(TemplateElement(self.get_response, True))
+        # Only register the response element, input will be in command bar
+        self.display_registry.register(TemplateElement(self.get_response))
 
     def get_input(self):
         return "> " + self.input
 
     def get_response(self):
-        return " " * 6 + self.response
+        return self.response
 
     def run(self):
         self.should_stop = False
         self.current_state = "default"
         minitel.cls()
         command_bar.set_state("prompt-default")
+        # Set dynamic content for input in command bar
+        command_bar.set_dynamic_content(self.get_input)
         while True:
             while self.buffer:
                 char = self.buffer[0]
                 self.buffer = self.buffer[1:]
                 self.on_key(char)
             self.display_registry.update()
+            command_bar.update()  # Update command bar to show input changes
             if self.should_stop:
+                # Clear dynamic content when leaving the tab
+                command_bar.clear_dynamic_content()
                 return
 
     def on_key(self, char):
@@ -67,6 +72,8 @@ class Prompt(Tab):
         if char == SpecialCharacters.ESCAPE:
             self.current_state = "default"
             command_bar.set_state("prompt-default")
+            # Restore dynamic content for input
+            command_bar.set_dynamic_content(self.get_input)
         elif char == SpecialCharacters.ENTER:
             self.should_stop = True
             self.next_tab = "menu"

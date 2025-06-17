@@ -59,11 +59,22 @@ class ConfigTab(Tab):
                 controller.deselect()
 
     def update_display(self):
-        # Remove all existing controllers and template elements
-        while self.controllers:
-            self.display_registry.elements.pop()
-            self.template_elements.pop()
-            self.controllers.pop()
+        # Clear the display registry
+        self.display_registry.elements.clear()
+        
+        # Clear controllers and template elements
+        self.controllers.clear()
+        self.template_elements.clear()
+        
+        # Re-add title
+        title = TemplateElement("Dashboard Entities Configuration")
+        self.display_registry.register(title)
+        self.template_elements.append(title)
+        
+        # Re-add empty line
+        empty_line = TemplateElement("")
+        self.display_registry.register(empty_line)
+        self.template_elements.append(empty_line)
         
         # Recreate controllers in the new order
         for entity in config.DASHBOARD_TAB["entities"]:
@@ -72,6 +83,12 @@ class ConfigTab(Tab):
             self.controllers.append(controller)
             self.template_elements.append(controller.get_template_element())
         
+        # Ensure selected_index is valid
+        if self.controllers:
+            self.selected_index = min(self.selected_index, len(self.controllers) - 1)
+        else:
+            self.selected_index = 0
+            
         self.update_selected()
 
     def save_config(self):
@@ -94,8 +111,15 @@ class ConfigTab(Tab):
     def run(self):
         self.should_stop = False
         self.current_state = "default"
+        self.selected_index = 0
+        
+        # Reinitialize display when tab is started
+        self.init_display()
+        
         minitel.cls()
         command_bar.set_state("config-default")
+        self.display_registry.display()  # Initial display
+        
         while True:
             while self.buffer:
                 char = self.buffer[0]
@@ -160,12 +184,18 @@ class ConfigTab(Tab):
     def remove_entity(self, char):
         if char == SpecialCharacters.ENTER:
             # Remove the selected entity
-            if config.DASHBOARD_TAB["entities"]:
+            if config.DASHBOARD_TAB["entities"] and self.selected_index < len(config.DASHBOARD_TAB["entities"]):
                 config.DASHBOARD_TAB["entities"].pop(self.selected_index)
                 self.save_config()
                 self.current_state = "default"
                 command_bar.set_state("config-default")
-                self.selected_index = min(self.selected_index, len(config.DASHBOARD_TAB["entities"]) - 1)
+                
+                # Adjust selected_index if needed
+                if config.DASHBOARD_TAB["entities"]:
+                    self.selected_index = min(self.selected_index, len(config.DASHBOARD_TAB["entities"]) - 1)
+                else:
+                    self.selected_index = 0
+                    
                 self.update_display()
         elif char == SpecialCharacters.ESCAPE:
             self.current_state = "default"
