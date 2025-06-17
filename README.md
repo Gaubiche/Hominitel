@@ -14,11 +14,11 @@ The goal of this project is to **turn a Minitel into a Home Assistant control in
 - **Notification system**: Monitors a configurable entity and displays notifications with sound when its value changes.
 
 ## TODO
-- [ ] Add prompt mode
+- [x] Add prompt mode
 - [x] Add keymaps on screen
 - [ ] Add a startup screen
 - [ ] Add a way to make the configuration through the Minitel (wifi, api url, api token)
-- [ ] Add a way to customize the dashboard on the Minitel (e.g., add/remove entities, change layout, reorder, ...)
+- [x] Add a way to customize the dashboard on the Minitel (e.g., add/remove entities, change layout, reorder, ...)
 - [x] Create a notification system to display messages on the Minitel (with the minitel beep)
 - [ ] Create a remote dev mode
 - [ ] Add brightness control to lightbulbs
