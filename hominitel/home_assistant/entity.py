@@ -5,7 +5,7 @@ class Entity:
         self.entity_id = entity_id
         self.api = HomeAssistantAPI()
         Entity.update_state(self)
-        self.name = self.state["attributes"]["friendly_name"]
+        self.name = self.state["attributes"]["friendly_name"] if "friendly_name" in self.state["attributes"] else self.state["entity_id"].split('.')[1]
 
     def update_state(self):
         self.state = self.api.get_state(self.entity_id)

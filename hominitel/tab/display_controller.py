@@ -1,13 +1,11 @@
 import _thread
 
-from hominitel.minitel.command_bar_state import CommandBarState
 from hominitel.tab.tab import Tab
 from hominitel.tab.tabs.menu import Menu
 from hominitel.minitel.keyboard_listener import KeyboardListener
 from hominitel.tab.tabs.dashboard import Dashboard
 from hominitel.tab.tabs.prompt import Prompt
 from hominitel.tab.tabs.config import ConfigTab
-from hominitel.minitel.special_characters import SpecialCharacters
 
 
 class DisplayController:

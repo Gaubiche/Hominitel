@@ -22,6 +22,7 @@ The goal of this project is to **turn a Minitel into a Home Assistant control in
 - [x] Create a notification system to display messages on the Minitel (with the minitel beep)
 - [ ] Create a remote dev mode
 - [ ] Add brightness control to lightbulbs
+- [ ] Optimize inline renderer
 ---
 
 ## Getting Started

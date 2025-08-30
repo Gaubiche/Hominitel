@@ -18,7 +18,9 @@ class HomeAssistantAPI:
             "content-type": "application/json",
         }
         response = get(url, headers=headers)
-        return response.json()
+        data = response.json()
+        response.close()
+        return data
 
     def set_state(self, entity_id, domain, service, data={}):
         url = f"{self.api_url}/services/{domain}/{service}"
@@ -28,7 +30,9 @@ class HomeAssistantAPI:
         }
         data["entity_id"] = entity_id
         response = post(url, headers=headers, json=data)
-        return response.json()
+        data = response.json()
+        response.close()
+        return data
 
     def prompt(self, text):
         url = f"{self.api_url}/conversation/process"
