@@ -11,6 +11,7 @@ from hominitel.home_assistant.light_controller import LightController
 from hominitel.home_assistant.notification_monitor import NotificationMonitor
 from hominitel.tab.tab import Tab
 from hominitel.minitel.command_bar import command_bar
+from hominitel.utils.thread_manager import thread_manager
 
 
 class Dashboard(Tab):
@@ -43,30 +44,49 @@ class Dashboard(Tab):
                 controller.deselect()
 
     def run(self):
-        self.should_stop = False
-        self.selected_index = 0
-        self.update_selected()
-        self.current_state = "default"
-        minitel.cls()
-        command_bar.set_state("dashboard-default")
-        self.entities_updater.start()
-        # Only start notification monitoring if not already running
-        if not self.notification_monitor.running or self.notification_monitor.notification_entity is None:
-            self.notification_monitor.start()
-        self.display_registry.display()
-        command_bar.display()
-        while True:
-            while self.buffer:
-                char = self.buffer[0]
-                self.buffer = self.buffer[1:]
-                self.on_key(char)
-            self.display_registry.update()
-            command_bar.update()
-            if self.should_stop:
-                self.entities_updater.running = False
-                # Don't stop notification monitor here, let it run globally
-                return
-            time.sleep(0.1)
+        """Main dashboard loop with thread management"""
+        try:
+            # Clean up finished threads before starting
+            thread_manager.cleanup_finished_threads()
+            
+            self.should_stop = False
+            self.selected_index = 0
+            self.update_selected()
+            self.current_state = "default"
+            minitel.cls()
+            command_bar.set_state("dashboard-default")
+            
+            # Start entities updater with thread management
+            self.entities_updater.start()
+            
+            # Only start notification monitoring if not already running
+            if not self.notification_monitor.running or self.notification_monitor.notification_entity is None:
+                self.notification_monitor.start()
+            
+            self.display_registry.display()
+            command_bar.display()
+            
+            while True:
+                while self.buffer:
+                    char = self.buffer[0]
+                    self.buffer = self.buffer[1:]
+                    self.on_key(char)
+                self.display_registry.update()
+                command_bar.update()
+                if self.should_stop:
+                    # Stop entities updater properly
+                    self.entities_updater.stop()
+                    # Don't stop notification monitor here, let it run globally
+                    return
+                time.sleep(0.1)
+                
+        except Exception as e:
+            print(f"Error in dashboard: {e}")
+        finally:
+            # Ensure cleanup
+            self.entities_updater.stop()
+            # Clean up finished threads after stopping
+            thread_manager.cleanup_finished_threads()
 
     @staticmethod
     def controller_from_entity(entity_id):

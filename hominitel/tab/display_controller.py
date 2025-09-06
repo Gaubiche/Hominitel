@@ -1,11 +1,10 @@
-import _thread
-
 from hominitel.tab.tab import Tab
 from hominitel.tab.tabs.menu import Menu
 from hominitel.minitel.keyboard_listener import KeyboardListener
 from hominitel.tab.tabs.dashboard import Dashboard
 from hominitel.tab.tabs.prompt import Prompt
 from hominitel.tab.tabs.config import ConfigTab
+from hominitel.utils.thread_manager import get_thread_status
 
 
 class DisplayController:
@@ -46,8 +45,22 @@ class DisplayController:
         self.current_tab.buffer += value
 
     def run(self):
-        _thread.start_new_thread(self.keyboard_listener.listen, ())
-        self.open_tab(self.default_tab)
-        while True:
-            self.current_tab.run()
-            self.open_tab_from_name(self.current_tab.next_tab)
+        """Main display controller loop with thread management"""
+        try:
+            # Start keyboard listener with thread management
+            self.keyboard_listener.start()
+            
+            # Print thread status for debugging
+            thread_info = get_thread_status()
+            print(f"Thread status: {thread_info['count']}/{thread_info['max_threads']} threads")
+            
+            self.open_tab(self.default_tab)
+            while True:
+                self.current_tab.run()
+                self.open_tab_from_name(self.current_tab.next_tab)
+                
+        except Exception as e:
+            print(f"Error in display controller: {e}")
+        finally:
+            # Clean up keyboard listener
+            self.keyboard_listener.stop()
