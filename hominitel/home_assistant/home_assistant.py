@@ -1,5 +1,5 @@
 import gc
-from hominitel.requests import get, post
+from hominitel.requests_wrapper import get, post
 from hominitel.config import config
 from hominitel.minitel.connection import WiFiConnection
 

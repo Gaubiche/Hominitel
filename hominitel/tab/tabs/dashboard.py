@@ -9,6 +9,7 @@ from hominitel.home_assistant.entity_controller import EntityController
 from hominitel.home_assistant.input_select_controller import InputSelectController
 from hominitel.home_assistant.light_controller import LightController
 from hominitel.home_assistant.notification_monitor import NotificationMonitor
+from hominitel.home_assistant.automation_controller import AutomationController
 from hominitel.tab.tab import Tab
 from hominitel.minitel.command_bar import command_bar
 from hominitel.utils.thread_manager import thread_manager
@@ -94,6 +95,8 @@ class Dashboard(Tab):
             return LightController(entity_id)
         if entity_id.startswith("input_select"):
             return InputSelectController(entity_id)
+        if entity_id.startswith("automation"):
+            return AutomationController(entity_id)
         return EntityController(entity_id)
 
     def on_key(self, char):
