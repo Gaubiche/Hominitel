@@ -24,18 +24,17 @@ try:
 except ImportError:
     UREQUESTS_AVAILABLE = False
 
+if UREQUESTS_AVAILABLE:
+    get_call = urequests.get
+    post_call = urequests.post
+
+else:
+    import requests
+    get_call = requests.get
+    post_call = requests.post
+
 class MemoryEfficientResponse:
     """Memory-efficient response wrapper"""
-
-    if UREQUESTS_AVAILABLE:
-        get = urequests.get
-        post_method = urequests.post
-
-    else:
-        import requests
-        get_call = requests.get
-        post_call = requests.post
-    
     def __init__(self, response):
         self._response = response
         self._content = None
@@ -89,7 +88,7 @@ def get(url, headers=None, timeout=10):
     try:
         # Force garbage collection before request
         gc.collect()
-        response = get(url, headers=headers, timeout=MEMORY_CONFIG["request_timeout"])
+        response = get_call(url, headers=headers, timeout=MEMORY_CONFIG["request_timeout"])
         return MemoryEfficientResponse(response)
         
     except MemoryError as e:
@@ -113,7 +112,7 @@ def post(url, headers=None, json_data=None, timeout=10):
         if json_data is not None:
             data = json.dumps(json_data)
 
-        response = post(url, headers=headers, data=data, timeout=MEMORY_CONFIG["request_timeout"])
+        response = post_call(url, headers=headers, data=data, timeout=MEMORY_CONFIG["request_timeout"])
         return MemoryEfficientResponse(response)
         
     except MemoryError as e:
